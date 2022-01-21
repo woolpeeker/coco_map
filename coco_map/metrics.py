@@ -60,7 +60,7 @@ def ap_per_class(tp, conf, pred_cls, target_cls, plot=False, save_dir='.', names
             # AP from recall-precision curve
             for j in range(tp.shape[1]):
                 ap[ci, j], mpre, mrec = compute_ap(recall[:, j], precision[:, j])
-                if plot and j == 0:
+                if j == 0:
                     py.append(np.interp(px, mrec, mpre))  # precision at mAP@0.5
 
     # Compute F1 (harmonic mean of precision and recall)
@@ -72,7 +72,7 @@ def ap_per_class(tp, conf, pred_cls, target_cls, plot=False, save_dir='.', names
         plot_mc_curve(px, r, Path(save_dir) / 'R_curve.png', names, ylabel='Recall')
 
     i = f1.mean(0).argmax()  # max F1 index
-    return p[:, i], r[:, i], ap, f1[:, i], unique_classes.astype('int32')
+    return p[:, i], r[:, i], ap, f1[:, i], unique_classes.astype('int32'), px, np.mean(py, 0)
 
 
 def compute_ap(recall, precision):
